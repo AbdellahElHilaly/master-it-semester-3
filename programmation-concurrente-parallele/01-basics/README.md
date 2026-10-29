@@ -23,4 +23,4 @@ You need a JDK installed. The examples use standard Java only; no external libra
 
 ## Study documentation
 
-Run the reusable documentation app from `../documentation`. It contains the French lesson text, smaller Arabic translations, technical English vocabulary, module navigation, theme controls, and practice progress.
+Run the reusable S3 Documentation component in Sami Workspace. It contains the French lesson text, smaller Arabic translations, technical English vocabulary, module navigation, theme controls, and practice progress.
