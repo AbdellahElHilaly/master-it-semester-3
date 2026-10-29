@@ -21,6 +21,6 @@ java -cp code SequentialVsConcurrent
 
 You need a JDK installed. The examples use standard Java only; no external library is required.
 
-## Study page
+## Study documentation
 
-Open `index.html` in a browser. It contains Arabic explanations, English technical vocabulary, and French module vocabulary.
+Run the reusable documentation app from `../documentation`. It contains the French lesson text, smaller Arabic translations, technical English vocabulary, module navigation, theme controls, and practice progress.
