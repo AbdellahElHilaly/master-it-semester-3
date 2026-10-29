@@ -10,6 +10,8 @@ const chatStatus = document.querySelector("#chatStatus");
 const grokConfig = document.querySelector("#grokConfig");
 const labels = { study: "Study · Leçon", vocabulary: "Vocabulary · Termes", practice: "Practice · Exécuter", roadmap: "Modules · Semestre" };
 const themeOrder = ["graphite", "paper", "webapi"];
+let aiProvider = "grok";
+let aiModel = "latest";
 
 function showSection(id) {
   const target = panels.some(panel => panel.id === id) ? id : "study";
@@ -65,7 +67,7 @@ async function sendGrokMessage() {
   chatInput.value = "";
   chatStatus.textContent = "Grok is thinking…";
   try {
-    const response = await fetch("/api/grok/chat", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ message }) });
+    const response = await fetch("/api/grok/chat", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ message, provider: aiProvider, model: aiModel }) });
     const data = await response.json();
     if (!response.ok) throw new Error(data.error || "Grok request failed.");
     addChatMessage("assistant", data.text, true);
@@ -80,16 +82,17 @@ document.querySelector("#sidebarToggle").addEventListener("click", () => documen
 document.querySelector("#chatToggle").addEventListener("click", () => drawer.classList.toggle("hidden"));
 document.querySelector("#chatClose").addEventListener("click", () => drawer.classList.add("hidden"));
 document.querySelector("#settingsToggle").addEventListener("click", () => document.querySelector("#settingsPop").classList.toggle("hidden"));
+document.querySelector("#settingsClose").addEventListener("click", () => document.querySelector("#settingsPop").classList.add("hidden"));
 document.querySelector("#fullscreenToggle").addEventListener("click", async () => {
   if (document.fullscreenElement) await document.exitFullscreen();
   else await document.querySelector(".app-shell").requestFullscreen();
 });
-document.querySelector("#themeToggle").addEventListener("click", async () => {
-  const current = document.body.dataset.theme;
-  const theme = themeOrder[(themeOrder.indexOf(current) + 1) % themeOrder.length];
-  document.body.dataset.theme = theme;
-  await fetch("/api/config", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ theme }) });
-});
+document.querySelector("#settingsSave").addEventListener("click", async () => { document.body.dataset.theme = document.querySelector("#themeSelect").value; aiProvider = document.querySelector("#providerSelect").value; aiModel = document.querySelector("#modelSelect").value; document.querySelector("#chatProviderLabel").textContent = aiProvider === "groq" ? "Groq" : "Grok"; await fetch("/api/config", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ theme: document.body.dataset.theme }) }); document.querySelector("#settingsPop").classList.add("hidden"); });
+function updateModels(data) { const provider = document.querySelector("#providerSelect").value; const select = document.querySelector("#modelSelect"); select.replaceChildren(...data.providers[provider].models.map(model => new Option(model, model))); select.value = data.providers[provider].models[0]; grokConfig.textContent = data.providers[provider].configured ? `${provider} ready` : `${provider} needs ${provider === "groq" ? "GROQ_API_KEY" : "XAI_API_KEY"}.`; }
+document.querySelector("#providerSelect").addEventListener("change", () => updateModels(window.aiStatus));
+document.querySelector("#chatSuspend").addEventListener("click", () => drawer.classList.toggle("suspended"));
+document.querySelector("#chatExpand").addEventListener("click", () => drawer.classList.toggle("expanded"));
+let drag = null; document.querySelector("#chatHead").addEventListener("pointerdown", event => { if (event.target.closest("button")) return; drag = { x:event.clientX-drawer.offsetLeft, y:event.clientY-drawer.offsetTop }; document.addEventListener("pointermove", moveChat); document.addEventListener("pointerup", stopDrag, { once:true }); }); function moveChat(event) { if (!drag) return; drawer.style.left = Math.max(0,event.clientX-drag.x)+"px"; drawer.style.top = Math.max(0,event.clientY-drag.y)+"px"; drawer.style.right="auto"; drawer.style.bottom="auto"; } function stopDrag(){ drag=null; document.removeEventListener("pointermove",moveChat); }
 document.querySelector("#chatSend").addEventListener("click", sendGrokMessage);
 chatInput.addEventListener("keydown", event => { if (event.key === "Enter" && !event.shiftKey) { event.preventDefault(); sendGrokMessage(); } });
 
@@ -97,10 +100,10 @@ function renderModules(modules) { moduleList.innerHTML = modules.map(module => `
 async function loadConfig() {
   const [configResponse, grokResponse] = await Promise.all([fetch("/api/config"), fetch("/api/grok/status")]);
   const data = await configResponse.json();
-  const grok = await grokResponse.json();
+  const grok = await grokResponse.json(); window.aiStatus = grok;
   renderModules(data.modules);
   document.body.dataset.theme = themeOrder.includes(data.settings.theme) ? data.settings.theme : "graphite";
-  grokConfig.textContent = grok.configured ? `Grok ready · ${grok.model}` : "Grok needs XAI_API_KEY in the launcher service.";
+  document.querySelector("#themeSelect").value = document.body.dataset.theme; updateModels(grok);
 }
 document.querySelector("#savePractice").addEventListener("click", async () => {
   const response = await fetch("/api/samples", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ module_slug: "programmation-concurrente-parallele", title: "PAR basics practice", kind: "practice" }) });
