@@ -1,6 +1,7 @@
 const panels = [...document.querySelectorAll(".section-panel")];
 const links = [...document.querySelectorAll(".nav-link")];
 const themeButton = document.querySelector("#themeToggle");
+const themeLabel = document.querySelector("#themeLabel");
 const moduleList = document.querySelector("#moduleList");
 const status = document.querySelector("#saveStatus");
 
@@ -14,7 +15,7 @@ links.forEach(link => link.addEventListener("click", () => showSection(link.data
 
 themeButton.addEventListener("click", async () => {
   const theme = document.body.classList.toggle("quiet") ? "quiet" : "light";
-  themeButton.textContent = theme === "quiet" ? "Theme · calme" : "Theme · نمط";
+  themeLabel.textContent = theme === "quiet" ? "calme" : "Theme";
   await fetch("/api/config", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ theme }) });
 });
 
@@ -32,7 +33,7 @@ async function loadConfig() {
   renderModules(data.modules);
   if (data.settings.theme === "quiet") {
     document.body.classList.add("quiet");
-    themeButton.textContent = "Theme · calme";
+    themeLabel.textContent = "calme";
   }
 }
 
