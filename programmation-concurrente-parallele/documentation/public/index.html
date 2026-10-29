@@ -30,13 +30,12 @@
         <button class="section-link" data-section="practice"><svg class="ico"><use href="#icon-code"></use></svg><span><b>Practice</b><small>Exécuter · التطبيق</small></span></button>
         <button class="section-link" data-section="roadmap"><svg class="ico"><use href="#icon-grid"></use></svg><span><b>Modules</b><small>Semestre · الوحدات</small></span></button>
       </nav>
-      <div class="sidebar-foot"><span><i class="status-dot"></i>SQLite local</span><span>Master IT · S3</span></div>
     </aside>
     <div class="layout-resizer" aria-hidden="true"></div>
     <main class="main">
       <header class="toolbar">
         <div class="toolbar-left"><button id="sidebarToggle" class="icon-btn" type="button" title="Afficher / masquer la navigation"><svg class="ico"><use href="#icon-panel"></use></svg></button><span id="toolbarTitle">Study · Leçon</span></div>
-        <div class="toolbar-right"><button id="chatToggle" class="icon-btn" type="button" title="Ouvrir Grok"><svg class="ico"><use href="#icon-chat"></use></svg></button><button id="settingsToggle" class="icon-btn" type="button" title="Réglages"><svg class="ico"><use href="#icon-settings"></use></svg></button><button id="fullscreenToggle" class="icon-btn" type="button" title="Plein écran"><svg class="ico"><use href="#icon-maximize"></use></svg></button><button id="themeToggle" class="icon-btn" type="button" title="Changer le thème"><svg class="ico"><use href="#icon-sun"></use></svg></button><span class="state"><i class="status-dot live"></i>ready</span></div>
+        <div class="toolbar-right"><button id="chatToggle" class="icon-btn" type="button" title="Ouvrir AI chat"><svg class="ico"><use href="#icon-chat"></use></svg></button><button id="settingsToggle" class="icon-btn" type="button" title="Réglages"><svg class="ico"><use href="#icon-settings"></use></svg></button><button id="fullscreenToggle" class="icon-btn" type="button" title="Plein écran"><svg class="ico"><use href="#icon-maximize"></use></svg></button><span class="state"><i class="status-dot live"></i>ready</span></div>
       </header>
       <div class="content-scroll">
         <section id="study" class="section-panel active-panel">
@@ -60,13 +59,13 @@
       </div>
       <footer>French for the course · English for technical words · Arabic for support</footer>
     </main>
-    <aside id="chatDrawer" class="chat-drawer hidden" aria-label="Grok study chat">
-      <header class="chat-head"><span><svg class="ico"><use href="#icon-chat"></use></svg> Grok · Study chat</span><button id="chatClose" class="icon-btn" type="button" title="Fermer"><svg class="ico"><use href="#icon-x"></use></svg></button></header>
+    <aside id="chatDrawer" class="chat-drawer hidden" aria-label="AI study chat">
+      <header id="chatHead" class="chat-head"><span><svg class="ico"><use href="#icon-chat"></use></svg> <b id="chatProviderLabel">AI</b> · Study chat</span><span><button id="chatSuspend" class="icon-btn" type="button" title="Suspendre">—</button><button id="chatExpand" class="icon-btn" type="button" title="Agrandir"><svg class="ico"><use href="#icon-maximize"></use></svg></button><button id="chatClose" class="icon-btn" type="button" title="Fermer"><svg class="ico"><use href="#icon-x"></use></svg></button></span></header>
       <div id="chatMessages" class="chat-messages"><p class="chat-empty">Ask a study question. Replies are shown as normal reading text, not source code.</p></div>
       <div class="chat-compose"><textarea id="chatInput" rows="3" dir="auto" placeholder="Ask Grok about this lesson…"></textarea><div><span id="chatStatus" class="chat-status"></span><button id="chatSend" class="btn primary" type="button">Send</button></div></div>
     </aside>
   </div>
-  <div id="settingsPop" class="settings-pop hidden"><b>Documentation settings</b><p>Theme cycles between Graphite, Paper and Web API.</p><p id="grokConfig">Checking Grok connection…</p></div>
+  <div id="settingsPop" class="settings-modal hidden" role="dialog" aria-modal="true" aria-label="Documentation settings"><div class="settings-card"><header><b>Documentation settings</b><button id="settingsClose" class="icon-btn" type="button"><svg class="ico"><use href="#icon-x"></use></svg></button></header><div class="settings-grid"><label>Theme<select id="themeSelect"><option value="graphite">Graphite</option><option value="paper">Paper</option><option value="webapi">Web API</option></select></label><label>AI provider<select id="providerSelect"><option value="grok">Grok · xAI</option><option value="groq">Groq</option></select></label><label>AI model<select id="modelSelect"></select></label><div class="settings-info"><b>Connection</b><p id="grokConfig">Checking AI connection…</p></div></div><footer><button id="settingsSave" class="btn primary" type="button">Save settings</button></footer></div></div>
   <script type="module" src="app.js"></script>
 </body>
 </html>
