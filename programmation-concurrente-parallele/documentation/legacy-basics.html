@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="fr" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PAR Basics | Bases de la programmation concurrente</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="hero">
+    <div class="eyebrow">Master IT · S3 · Programmation concurrente et parallèle</div>
+    <h1>Base de la programmation concurrente et parallèle <span class="ar">أساسيات البرمجة المتزامنة والمتوازية</span></h1>
+    <p class="lead">Comprendre l’idée, lire le vocabulaire, puis exécuter le code. <span class="ar">افهم الفكرة، اقرأ المصطلحات، ثم شغّل الكود.</span></p>
+    <div class="progress" aria-label="Study path">
+      <span class="step active">01 Comprendre</span>
+      <span class="step">02 Exécuter</span>
+      <span class="step">03 Modifier</span>
+      <span class="step">04 Observer</span>
+    </div>
+  </header>
+
+  <main class="layout">
+    <article class="focus">
+      <div class="card-label">Première idée <span class="ar">الفكرة الأولى</span></div>
+      <h2>Séquentiel vs concurrent <span class="ar">التنفيذ التسلسلي مقابل التنفيذ المتزامن</span></h2>
+      <p>En exécution <strong>séquentielle</strong>, une tâche termine avant le début de la suivante. En exécution <strong>concurrente</strong>, plusieurs tâches avancent pendant la même période. <span class="ar">في التنفيذ التسلسلي تنتهي مهمة قبل بداية التالية. في التنفيذ المتزامن تتقدم عدة مهام خلال نفس الفترة.</span></p>
+      <div class="compare">
+        <div><span class="icon">1 → 2 → 3</span><b>Séquentiel</b><small>Une tâche après l’autre <span class="ar">مهمة بعد أخرى</span></small></div>
+        <div><span class="icon">1 ∥ 2 ∥ 3</span><b>Concurrent</b><small>Tâches entrelacées <span class="ar">مهام متداخلة أو متزامنة</span></small></div>
+      </div>
+      <p class="note">Important : concurrent ne signifie pas toujours parallèle. Le parallélisme réel utilise généralement plusieurs cœurs ou processeurs. <span class="ar">مهم: التزامن لا يعني دائمًا التوازي؛ التوازي الحقيقي يستعمل عادة عدة أنوية أو معالجات.</span></p>
+    </article>
+
+    <aside class="vocabulary">
+      <div class="card-label">Petit vocabulaire <span class="ar">قاموس صغير</span></div>
+      <dl>
+        <dt>Thread</dt><dd>Fil d’exécution dans un programme <span class="ar">خيط تنفيذ داخل البرنامج</span></dd>
+        <dt>Process</dt><dd>Programme en exécution avec sa mémoire <span class="ar">برنامج قيد التنفيذ بذاكرته</span></dd>
+        <dt>Task</dt><dd>Travail exécuté par le programme <span class="ar">مهمة ينفذها البرنامج</span></dd>
+        <dt>Shared resource</dt><dd>Ressource utilisée par plusieurs tâches <span class="ar">مورد مشترك بين المهام</span></dd>
+        <dt>Synchronization</dt><dd>Organisation de l’accès et du temps <span class="ar">تنظيم الوصول والتوقيت</span></dd>
+        <dt>Parallelism</dt><dd>Exécution réelle au même moment <span class="ar">تنفيذ فعلي في الوقت نفسه</span></dd>
+      </dl>
+    </aside>
+
+    <article class="lesson">
+      <div class="card-label">Leçon <span class="ar">الدرس</span></div>
+      <h2>Qu’est-ce qu’un Thread ? <span class="ar">ما هو Thread؟</span></h2>
+      <p>Un <strong>Thread</strong> est un petit chemin d’exécution dans un programme. Plusieurs Threads peuvent partager des données ; il faut alors penser à la <strong>Synchronization</strong>. <span class="ar">الـ Thread هو مسار تنفيذ صغير داخل البرنامج. يمكن لعدة خيوط مشاركة البيانات، لذلك نحتاج إلى المزامنة.</span></p>
+      <ol>
+        <li>Créer un Thread. <span class="ar">أنشئ Thread.</span></li>
+        <li>Lui donner une tâche. <span class="ar">أعطه مهمة.</span></li>
+        <li>Le lancer avec <code>start()</code>. <span class="ar">شغّله باستعمال start().</span></li>
+        <li>Attendre sa fin avec <code>join()</code>. <span class="ar">انتظر نهايته باستعمال join().</span></li>
+      </ol>
+      <div class="callout">Exemple : <code>code/ThreadBasics.java</code>. <span class="ar">التجربة موجودة في الملف.</span></div>
+    </article>
+
+    <article class="practice">
+      <div class="card-label">Pratique rapide <span class="ar">تطبيق سريع</span></div>
+      <h2>Modifier et répondre <span class="ar">غيّر الكود وأجب</span></h2>
+      <div class="challenge"><span class="number">01</span><p>Changer les noms : l’ordre d’affichage change-t-il ? <span class="ar">غيّر الأسماء: هل يتغير ترتيب الطباعة؟</span></p></div>
+      <div class="challenge"><span class="number">02</span><p>Passer de 2 à 5 Threads et utiliser <code>join()</code>. <span class="ar">غيّر العدد من 2 إلى 5 واستعمل join().</span></p></div>
+      <div class="challenge"><span class="number">03</span><p>Comparer le temps quand le nombre d’éléments change. <span class="ar">قارن الزمن عند تغيير عدد العناصر.</span></p></div>
+    </article>
+
+    <article class="roadmap">
+      <div class="card-label">Plan du module <span class="ar">خريطة المقرر</span></div>
+      <div class="roadmap-grid">
+        <div><b>01 Bases</b><small>Threads, tâches, temps <span class="ar">الخيوط والمهام والزمن</span></small></div>
+        <div><b>02 Threads</b><small>Java Thread, Runnable <span class="ar">الخيوط في Java</span></small></div>
+        <div><b>03 Processus</b><small>Communication, contrôle <span class="ar">التواصل والتحكم</span></small></div>
+        <div><b>04 OpenMP</b><small>Mémoire partagée en C/C++ <span class="ar">الذاكرة المشتركة</span></small></div>
+        <div><b>05 MPI</b><small>Passage de messages <span class="ar">تمرير الرسائل</span></small></div>
+      </div>
+    </article>
+  </main>
+
+  <footer>Lire · exécuter · modifier · noter dans Notion <span class="ar">اقرأ · شغّل · عدّل · سجّل في Notion</span></footer>
+</body>
+</html>
