@@ -85,11 +85,13 @@ document.querySelector("#settingsToggle").addEventListener("click", () => docume
 document.querySelector("#settingsClose").addEventListener("click", () => document.querySelector("#settingsPop").classList.add("hidden"));
 document.querySelector("#fullscreenToggle").addEventListener("click", async () => {
   if (document.fullscreenElement) await document.exitFullscreen();
-  else await document.querySelector(".app-shell").requestFullscreen();
+  else await document.documentElement.requestFullscreen();
 });
-document.querySelector("#settingsSave").addEventListener("click", async () => { document.body.dataset.theme = document.querySelector("#themeSelect").value; aiProvider = document.querySelector("#providerSelect").value; aiModel = document.querySelector("#modelSelect").value; document.querySelector("#chatProviderLabel").textContent = aiProvider === "groq" ? "Groq" : "Grok"; await fetch("/api/config", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ theme: document.body.dataset.theme }) }); document.querySelector("#settingsPop").classList.add("hidden"); });
-function updateModels(data) { const provider = document.querySelector("#providerSelect").value; const select = document.querySelector("#modelSelect"); select.replaceChildren(...data.providers[provider].models.map(model => new Option(model, model))); select.value = data.providers[provider].models[0]; grokConfig.textContent = data.providers[provider].configured ? `${provider} ready` : `${provider} needs ${provider === "groq" ? "GROQ_API_KEY" : "XAI_API_KEY"}.`; }
-document.querySelector("#providerSelect").addEventListener("change", () => updateModels(window.aiStatus));
+async function applySettings() { document.body.dataset.theme = document.querySelector("#themeSelect").value; aiProvider = document.querySelector("#providerSelect").value; aiModel = document.querySelector("#modelSelect").value; document.querySelector("#chatProviderLabel").textContent = aiProvider === "groq" ? "Groq" : "Grok"; await fetch("/api/config", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ theme: document.body.dataset.theme, provider: aiProvider, model: aiModel }) }); }
+function updateModels(data, wanted) { const provider = document.querySelector("#providerSelect").value; const select = document.querySelector("#modelSelect"); select.replaceChildren(...data.providers[provider].models.map(model => new Option(model, model))); select.value = data.providers[provider].models.includes(wanted) ? wanted : data.providers[provider].models[0]; grokConfig.textContent = data.providers[provider].configured ? `${provider} ready` : `${provider} uses the Dev Utils key when configured.`; }
+document.querySelector("#themeSelect").addEventListener("change", applySettings);
+document.querySelector("#providerSelect").addEventListener("change", () => { updateModels(window.aiStatus); applySettings(); });
+document.querySelector("#modelSelect").addEventListener("change", applySettings);
 document.querySelector("#chatSuspend").addEventListener("click", () => drawer.classList.toggle("suspended"));
 document.querySelector("#chatExpand").addEventListener("click", () => drawer.classList.toggle("expanded"));
 let drag = null; document.querySelector("#chatHead").addEventListener("pointerdown", event => { if (event.target.closest("button")) return; drag = { x:event.clientX-drawer.offsetLeft, y:event.clientY-drawer.offsetTop }; document.addEventListener("pointermove", moveChat); document.addEventListener("pointerup", stopDrag, { once:true }); }); function moveChat(event) { if (!drag) return; drawer.style.left = Math.max(0,event.clientX-drag.x)+"px"; drawer.style.top = Math.max(0,event.clientY-drag.y)+"px"; drawer.style.right="auto"; drawer.style.bottom="auto"; } function stopDrag(){ drag=null; document.removeEventListener("pointermove",moveChat); }
@@ -103,7 +105,7 @@ async function loadConfig() {
   const grok = await grokResponse.json(); window.aiStatus = grok;
   renderModules(data.modules);
   document.body.dataset.theme = themeOrder.includes(data.settings.theme) ? data.settings.theme : "graphite";
-  document.querySelector("#themeSelect").value = document.body.dataset.theme; updateModels(grok);
+  document.querySelector("#themeSelect").value = document.body.dataset.theme; document.querySelector("#providerSelect").value = data.settings.provider || "grok"; updateModels(grok, data.settings.model); aiProvider = document.querySelector("#providerSelect").value; aiModel = document.querySelector("#modelSelect").value; document.querySelector("#chatProviderLabel").textContent = aiProvider === "groq" ? "Groq" : "Grok";
 }
 document.querySelector("#savePractice").addEventListener("click", async () => {
   const response = await fetch("/api/samples", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ module_slug: "programmation-concurrente-parallele", title: "PAR basics practice", kind: "practice" }) });
