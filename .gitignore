@@ -21,3 +21,6 @@ dist/
 *.log
 *.tmp
 results/
+
+# Documentation app local database
+programmation-concurrente-parallele/documentation/.data/
