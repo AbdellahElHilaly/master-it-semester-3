@@ -8,19 +8,19 @@
 </head>
 <body>
   <header class="topbar">
-    <a class="brand" href="#study">PAR <span>S3 documentation</span></a>
+    <a class="brand" href="#study"><span class="brand-mark"><svg class="ui-icon"><use href="#icon-book"></use></svg></span>PAR <span>S3 documentation</span></a>
     <nav class="nav" aria-label="Documentation sections">
-      <button class="nav-link active" data-section="study">Study <span class="ar">الدراسة</span></button>
-      <button class="nav-link" data-section="vocabulary">Vocabulary <span class="ar">المصطلحات</span></button>
-      <button class="nav-link" data-section="practice">Practice <span class="ar">التطبيق</span></button>
-      <button class="nav-link" data-section="roadmap">Modules <span class="ar">الوحدات</span></button>
+      <button class="nav-link active" data-section="study"><svg class="ui-icon"><use href="#icon-book"></use></svg><span>Study</span><span class="ar">الدراسة</span></button>
+      <button class="nav-link" data-section="vocabulary"><svg class="ui-icon"><use href="#icon-list"></use></svg><span>Vocabulary</span><span class="ar">المصطلحات</span></button>
+      <button class="nav-link" data-section="practice"><svg class="ui-icon"><use href="#icon-code"></use></svg><span>Practice</span><span class="ar">التطبيق</span></button>
+      <button class="nav-link" data-section="roadmap"><svg class="ui-icon"><use href="#icon-grid"></use></svg><span>Modules</span><span class="ar">الوحدات</span></button>
     </nav>
-    <button id="themeToggle" class="theme-button" type="button">Theme · نمط</button>
+    <button id="themeToggle" class="theme-button" type="button"><svg class="ui-icon"><use href="#icon-sun"></use></svg><span id="themeLabel">Theme</span></button>
   </header>
 
   <main class="notebook" aria-live="polite">
     <section id="study" class="section-panel active-panel">
-      <div class="section-heading"><span class="eyebrow">01 · First lesson</span><span class="ar">الدرس الأول</span></div>
+      <div class="section-heading"><span class="section-icon"><svg class="ui-icon"><use href="#icon-book"></use></svg></span><span class="eyebrow">01 · First lesson</span><span class="ar">الدرس الأول</span></div>
       <h1>Base de la programmation concurrente et parallèle</h1>
       <p class="translation">أساسيات البرمجة المتزامنة والمتوازية</p>
       <div class="lesson-grid">
@@ -41,7 +41,7 @@
     </section>
 
     <section id="vocabulary" class="section-panel">
-      <div class="section-heading"><span class="eyebrow">02 · Technical vocabulary</span><span class="ar">المصطلحات التقنية</span></div>
+      <div class="section-heading"><span class="section-icon"><svg class="ui-icon"><use href="#icon-list"></use></svg></span><span class="eyebrow">02 · Technical vocabulary</span><span class="ar">المصطلحات التقنية</span></div>
       <h1>Petit vocabulaire du cours</h1>
       <p class="translation">قاموس صغير للمقرر</p>
       <div class="vocab-list" id="vocabList">
@@ -55,7 +55,7 @@
     </section>
 
     <section id="practice" class="section-panel">
-      <div class="section-heading"><span class="eyebrow">03 · Learn by doing</span><span class="ar">التعلم بالتطبيق</span></div>
+      <div class="section-heading"><span class="section-icon"><svg class="ui-icon"><use href="#icon-code"></use></svg></span><span class="eyebrow">03 · Learn by doing</span><span class="ar">التعلم بالتطبيق</span></div>
       <h1>Modifier, exécuter, observer</h1>
       <p class="translation">عدّل، شغّل، لاحظ</p>
       <div class="practice-grid">
@@ -67,13 +67,20 @@
     </section>
 
     <section id="roadmap" class="section-panel">
-      <div class="section-heading"><span class="eyebrow">04 · S3 modules</span><span class="ar">وحدات S3</span></div>
+      <div class="section-heading"><span class="section-icon"><svg class="ui-icon"><use href="#icon-grid"></use></svg></span><span class="eyebrow">04 · S3 modules</span><span class="ar">وحدات S3</span></div>
       <h1>Documentation template for every module</h1>
       <p class="translation">قالب توثيق قابل لإعادة الاستخدام لكل وحدة</p>
       <div id="moduleList" class="module-list"></div>
     </section>
   </main>
   <footer>French for the course · English for technical words · Arabic for support</footer>
+  <svg class="icon-sprite" aria-hidden="true">
+    <symbol id="icon-book" viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5v-15Z"/><path d="M4 20.5A2.5 2.5 0 0 1 6.5 18H20M8 7h8M8 10h6"/></symbol>
+    <symbol id="icon-list" viewBox="0 0 24 24"><path d="M8 6h12M8 12h12M8 18h12"/><path d="M4 6h.01M4 12h.01M4 18h.01"/></symbol>
+    <symbol id="icon-code" viewBox="0 0 24 24"><path d="m8 8-4 4 4 4M16 8l4 4-4 4M14 5l-4 14"/></symbol>
+    <symbol id="icon-grid" viewBox="0 0 24 24"><rect x="4" y="4" width="6" height="6" rx="1"/><rect x="14" y="4" width="6" height="6" rx="1"/><rect x="4" y="14" width="6" height="6" rx="1"/><rect x="14" y="14" width="6" height="6" rx="1"/></symbol>
+    <symbol id="icon-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></symbol>
+  </svg>
   <script type="module" src="app.js"></script>
 </body>
 </html>
