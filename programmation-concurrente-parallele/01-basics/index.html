@@ -12,15 +12,15 @@
     <h1>أساسيات البرمجة المتزامنة والمتوازية</h1>
     <p class="lead">صفحة دراسة بسيطة: اقرأ الفكرة، شاهد المصطلح، ثم شغّل الكود بنفسك.</p>
     <div class="progress" aria-label="Study path">
-      <span class="step active">1 · افهم</span>
-      <span class="step">2 · شغّل</span>
-      <span class="step">3 · غيّر</span>
-      <span class="step">4 · لاحظ</span>
+      <span class="step active">01 افهم</span>
+      <span class="step">02 شغّل</span>
+      <span class="step">03 غيّر</span>
+      <span class="step">04 لاحظ</span>
     </div>
   </header>
 
   <main class="layout">
-    <section class="card focus">
+    <article class="focus">
       <div class="card-label">الفكرة الأولى · First idea</div>
       <h2>Sequential vs Concurrent</h2>
       <p><strong>التنفيذ التسلسلي</strong> يعني أن مهمة تنتهي قبل أن تبدأ المهمة التالية. أما <strong>التنفيذ المتزامن</strong> فيسمح لعدة مهام بالتقدم خلال نفس الفترة الزمنية.</p>
@@ -29,9 +29,9 @@
         <div><span class="icon">1 ∥ 2 ∥ 3</span><b>Concurrent</b><small>مهام متداخلة أو متزامنة</small></div>
       </div>
       <p class="note">مهم: Concurrent لا يعني دائمًا Parallel. التوازي الحقيقي يحتاج عادةً إلى أكثر من نواة أو معالج.</p>
-    </section>
+    </article>
 
-    <aside class="card vocabulary">
+    <aside class="vocabulary">
       <div class="card-label">قاموس صغير · Petit vocabulaire</div>
       <dl>
         <dt>Thread</dt><dd>خيط تنفيذ داخل البرنامج · fil d’exécution</dd>
@@ -43,7 +43,7 @@
       </dl>
     </aside>
 
-    <section class="card lesson">
+    <article class="lesson">
       <div class="card-label">الدرس · Lesson · Cours</div>
       <h2>ما هو Thread؟</h2>
       <p>الـ <strong>Thread</strong> هو مسار تنفيذ صغير داخل البرنامج. يمكن للبرنامج أن يخلق عدة Threads، لكن عندما تتشارك هذه الخيوط نفس البيانات يجب الانتباه إلى <strong>Synchronization</strong>.</p>
@@ -54,9 +54,9 @@
         <li>انتظر نهايته باستعمال <code>join()</code>.</li>
       </ol>
       <div class="callout">التجربة العملية موجودة في <code>code/ThreadBasics.java</code>.</div>
-    </section>
+    </article>
 
-    <section class="card practice">
+    <article class="practice">
       <div class="card-label">تطبيق سريع · Practice</div>
       <h2>غيّر الكود وأجب</h2>
       <div class="challenge">
@@ -71,9 +71,9 @@
         <span class="number">03</span>
         <p>قارن زمن التنفيذ في المثال الثاني عندما تغيّر عدد العناصر.</p>
       </div>
-    </section>
+    </article>
 
-    <section class="card roadmap">
+    <article class="roadmap">
       <div class="card-label">خريطة المقرر · Roadmap · Plan</div>
       <div class="roadmap-grid">
         <div><b>01 Basics</b><small>Threads, tasks, timing</small></div>
@@ -82,9 +82,10 @@
         <div><b>04 OpenMP</b><small>C/C++ shared memory</small></div>
         <div><b>05 MPI</b><small>Message passing</small></div>
       </div>
-    </section>
+    </article>
   </main>
 
   <footer>اقرأ · شغّل · غيّر · سجّل ملاحظتك في Notion</footer>
 </body>
 </html>
+
