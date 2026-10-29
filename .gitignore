@@ -1,0 +1,23 @@
+# Build and generated output
+bin/
+build/
+out/
+dist/
+*.o
+*.obj
+*.class
+*.exe
+*.dll
+*.so
+*.a
+
+# IDE and local environment
+.idea/
+.vscode/
+*.user
+*.suo
+
+# Experiment output
+*.log
+*.tmp
+results/
