@@ -15,6 +15,10 @@
     <symbol id="icon-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></symbol>
     <symbol id="icon-panel" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="1"/><path d="M9 4v16"/></symbol>
     <symbol id="icon-check" viewBox="0 0 24 24"><path d="m4 12 5 5L20 6"/></symbol>
+    <symbol id="icon-chat" viewBox="0 0 24 24"><path d="M20 11.5a7.5 7.5 0 0 1-7.5 7.5 7.7 7.7 0 0 1-3.8-1L4 20l1.3-4.5A7.5 7.5 0 1 1 20 11.5Z"/><path d="M8.5 11.5h.01M12 11.5h.01M15.5 11.5h.01"/></symbol>
+    <symbol id="icon-settings" viewBox="0 0 24 24"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></symbol>
+    <symbol id="icon-maximize" viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></symbol>
+    <symbol id="icon-x" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
   </svg>
   <div class="app-shell">
     <aside class="sidebar" id="sidebar">
@@ -32,13 +36,14 @@
     <main class="main">
       <header class="toolbar">
         <div class="toolbar-left"><button id="sidebarToggle" class="icon-btn" type="button" title="Afficher / masquer la navigation"><svg class="ico"><use href="#icon-panel"></use></svg></button><span id="toolbarTitle">Study · Leçon</span></div>
-        <div class="toolbar-right"><button id="themeToggle" class="icon-btn" type="button" title="Changer le thème"><svg class="ico"><use href="#icon-sun"></use></svg></button><span class="state"><i class="status-dot live"></i>ready</span></div>
+        <div class="toolbar-right"><button id="chatToggle" class="icon-btn" type="button" title="Ouvrir Grok"><svg class="ico"><use href="#icon-chat"></use></svg></button><button id="settingsToggle" class="icon-btn" type="button" title="Réglages"><svg class="ico"><use href="#icon-settings"></use></svg></button><button id="fullscreenToggle" class="icon-btn" type="button" title="Plein écran"><svg class="ico"><use href="#icon-maximize"></use></svg></button><button id="themeToggle" class="icon-btn" type="button" title="Changer le thème"><svg class="ico"><use href="#icon-sun"></use></svg></button><span class="state"><i class="status-dot live"></i>ready</span></div>
       </header>
       <div class="content-scroll">
         <section id="study" class="section-panel active-panel">
           <div class="overline"><span>01 · FIRST LESSON</span><span class="translation">الدرس الأول</span></div>
           <h1>Base de la programmation concurrente et parallèle</h1><p class="translation intro">أساسيات البرمجة المتزامنة والمتوازية</p>
           <div class="split"><article class="block accent-block"><div class="block-head"><svg class="ico"><use href="#icon-book"></use></svg><h2>Séquentiel vs concurrent</h2></div><p>Une tâche séquentielle termine avant la suivante. Des tâches concurrentes peuvent avancer pendant la même période.</p><p class="translation">تنتهي المهمة التسلسلية قبل التالية، بينما يمكن لعدة مهام متزامنة أن تتقدم خلال نفس الفترة.</p><div class="compare"><div><b>1 → 2 → 3</b><small>Séquentiel · مهمة بعد أخرى</small></div><div><b>1 ∥ 2 ∥ 3</b><small>Concurrent · مهام متداخلة</small></div></div></article><article class="block"><div class="block-head"><svg class="ico"><use href="#icon-check"></use></svg><h2>Point important</h2></div><p>Concurrent ne signifie pas toujours parallèle. Le parallélisme réel utilise plusieurs cœurs ou processeurs.</p><p class="translation">التزامن لا يعني دائمًا التوازي؛ التوازي الحقيقي يستعمل عدة أنوية أو معالجات.</p></article></div>
+          <article id="assistantNote" class="assistant-note hidden"><div class="block-head"><svg class="ico"><use href="#icon-chat"></use></svg><h2>Grok study note</h2></div><div id="assistantNoteText"></div></article>
         </section>
         <section id="vocabulary" class="section-panel">
           <div class="overline"><span>02 · TECHNICAL VOCABULARY</span><span class="translation">المصطلحات التقنية</span></div><h1>Petit vocabulaire du cours</h1><p class="translation intro">قاموس صغير للمقرر</p>
@@ -55,7 +60,13 @@
       </div>
       <footer>French for the course · English for technical words · Arabic for support</footer>
     </main>
+    <aside id="chatDrawer" class="chat-drawer hidden" aria-label="Grok study chat">
+      <header class="chat-head"><span><svg class="ico"><use href="#icon-chat"></use></svg> Grok · Study chat</span><button id="chatClose" class="icon-btn" type="button" title="Fermer"><svg class="ico"><use href="#icon-x"></use></svg></button></header>
+      <div id="chatMessages" class="chat-messages"><p class="chat-empty">Ask a study question. Replies are shown as normal reading text, not source code.</p></div>
+      <div class="chat-compose"><textarea id="chatInput" rows="3" dir="auto" placeholder="Ask Grok about this lesson…"></textarea><div><span id="chatStatus" class="chat-status"></span><button id="chatSend" class="btn primary" type="button">Send</button></div></div>
+    </aside>
   </div>
+  <div id="settingsPop" class="settings-pop hidden"><b>Documentation settings</b><p>Theme cycles between Graphite, Paper and Web API.</p><p id="grokConfig">Checking Grok connection…</p></div>
   <script type="module" src="app.js"></script>
 </body>
 </html>
