@@ -1,31 +1,25 @@
-# S3 PAR Lab
+# Master IT — Semester 3 Study Labs
 
-Learning-by-doing repository for **Programmation concurrente et parallèle**.
+One learning-by-doing repository for the practical work of Master IT, semester 3.
 
-## Structure
+## Modules
 
-- `01-basics/` — sequential foundations and small benchmarks
-- `02-threads/` — threads and shared-memory concurrency
-- `03-processes/` — processes and communication
-- `04-openmp/` — OpenMP experiments
-- `05-mpi/` — MPI experiments
-- `experiments/` — focused measurements and comparisons
-- `notes/` — concise learning notes and conclusions
+- `programmation-concurrente-parallele/`
+- `big-data/`
+- `theorie-des-graphes/`
+- `ingenierie-modeles-langages/`
+- `traitement-automatique-langues/`
+- `traitement-video/`
+- `vision-ordinateur/`
 
-## Working loop
+Each module owns its code, experiments, notes, and local README. Course PDFs, exams, solutions, and shared documents remain in Drive under `Shared materials` and are not duplicated here.
 
-1. Choose one concept from the PAR study plan.
-2. Add a small reproducible example.
-3. Run it and record the observation in `notes/`.
-4. Commit the result with a focused message.
+## Working rule
 
-This lab is separate from `Shared materials`: documents stay in Drive, while code and its history stay in Git.
+GitHub is the source of truth for code. Notion is the study dashboard that links to this repository and tracks progress. Drive is the source of truth for study documents.
 
 ## Notion
 
-The Notion PAR module page is the study dashboard. It should link to this repository and record completed experiments, not duplicate the source code.
+The S3 workspace links this repository from the relevant module pages. Keep updates manual and focused: add code here, then record the experiment or milestone in Notion.
 
-Repository status: local repository initialized and ready to be published in the shared semester repository.
-
-GitHub repository: https://github.com/AbdellahElHilaly/master-it-semester-3
-
+Repository: https://github.com/AbdellahElHilaly/master-it-semester-3
