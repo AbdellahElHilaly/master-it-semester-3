@@ -40,12 +40,27 @@ const seedModules = [
 ];
 const insertModule = db.prepare("INSERT OR IGNORE INTO modules (slug, title_fr, title_ar, status) VALUES (?, ?, ?, ?)");
 for (const module of seedModules) insertModule.run(...module);
-db.prepare("INSERT OR IGNORE INTO settings (key, value) VALUES ('theme', 'light')").run();
+db.prepare("INSERT OR IGNORE INTO settings (key, value) VALUES ('theme', 'graphite')").run();
 
 const json = (response, status, body) => {
   response.writeHead(status, { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" });
   response.end(JSON.stringify(body));
 };
+
+async function readJson(request) {
+  let body = "";
+  for await (const chunk of request) body += chunk;
+  try { return JSON.parse(body || "{}"); } catch { return null; }
+}
+
+function plainStudyText(value) {
+  return String(value || "")
+    .replace(/```[\s\S]*?```/g, "")
+    .replace(/<[^>]*>/g, "")
+    .replace(/^\s*[-#*>]+\s?/gm, "")
+    .trim()
+    .slice(0, 12000);
+}
 
 const staticTypes = { ".html": "text/html", ".css": "text/css", ".js": "text/javascript", ".svg": "image/svg+xml" };
 function serveStatic(response, pathname) {
@@ -66,20 +81,45 @@ const server = createServer(async (request, response) => {
     return json(response, 200, { settings, modules, samples });
   }
   if (url.pathname === "/api/config" && request.method === "POST") {
-    let body = "";
-    for await (const chunk of request) body += chunk;
-    const payload = JSON.parse(body || "{}");
+    const payload = await readJson(request);
+    if (!payload) return json(response, 400, { error: "Invalid JSON" });
     if (!["graphite", "paper", "webapi"].includes(payload.theme)) return json(response, 400, { error: "Unsupported theme" });
     db.prepare("INSERT INTO settings (key, value) VALUES ('theme', ?) ON CONFLICT(key) DO UPDATE SET value=excluded.value").run(payload.theme);
     return json(response, 200, { ok: true, theme: payload.theme });
   }
   if (url.pathname === "/api/samples" && request.method === "POST") {
-    let body = "";
-    for await (const chunk of request) body += chunk;
-    const payload = JSON.parse(body || "{}");
+    const payload = await readJson(request);
+    if (!payload) return json(response, 400, { error: "Invalid JSON" });
     if (!payload.title || !payload.module_slug) return json(response, 400, { error: "title and module_slug are required" });
     const result = db.prepare("INSERT INTO samples (module_slug, title, kind) VALUES (?, ?, ?)").run(payload.module_slug, payload.title, payload.kind || "practice");
     return json(response, 201, { ok: true, id: Number(result.lastInsertRowid) });
+  }
+  if (url.pathname === "/api/grok/status" && request.method === "GET") {
+    return json(response, 200, { configured: Boolean(process.env.XAI_API_KEY), model: process.env.XAI_MODEL || "latest" });
+  }
+  if (url.pathname === "/api/grok/chat" && request.method === "POST") {
+    if (!process.env.XAI_API_KEY) return json(response, 503, { error: "Grok is not configured. Set XAI_API_KEY before starting Documentation." });
+    const payload = await readJson(request);
+    const message = plainStudyText(payload?.message);
+    if (!message) return json(response, 400, { error: "A message is required." });
+    try {
+      const upstream = await fetch("https://api.x.ai/v1/chat/completions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${process.env.XAI_API_KEY}` },
+        body: JSON.stringify({
+          model: process.env.XAI_MODEL || "latest",
+          messages: [
+            { role: "system", content: "You are Grok inside a Master IT study notebook. Reply only as concise, readable learning text. French is primary; add a short Arabic explanation when useful. Never use HTML, Markdown, CSS, JavaScript, code blocks, or tags." },
+            { role: "user", content: message }
+          ]
+        })
+      });
+      const result = await upstream.json();
+      if (!upstream.ok) return json(response, upstream.status, { error: result?.error?.message || "Grok request failed." });
+      return json(response, 200, { text: plainStudyText(result?.choices?.[0]?.message?.content) });
+    } catch {
+      return json(response, 502, { error: "Could not reach the Grok API." });
+    }
   }
   if (request.method === "GET" && serveStatic(response, url.pathname)) return;
   json(response, 404, { error: "Not found" });
