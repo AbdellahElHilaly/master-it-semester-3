@@ -95,19 +95,21 @@ const server = createServer(async (request, response) => {
     return json(response, 201, { ok: true, id: Number(result.lastInsertRowid) });
   }
   if (url.pathname === "/api/grok/status" && request.method === "GET") {
-    return json(response, 200, { configured: Boolean(process.env.XAI_API_KEY), model: process.env.XAI_MODEL || "latest" });
+    return json(response, 200, { providers: { grok: { configured: Boolean(process.env.XAI_API_KEY), models: [process.env.XAI_MODEL || "latest"] }, groq: { configured: Boolean(process.env.GROQ_API_KEY), models: ["openai/gpt-oss-20b", "openai/gpt-oss-120b", "llama-3.3-70b-versatile"] } } });
   }
   if (url.pathname === "/api/grok/chat" && request.method === "POST") {
-    if (!process.env.XAI_API_KEY) return json(response, 503, { error: "Grok is not configured. Set XAI_API_KEY before starting Documentation." });
     const payload = await readJson(request);
     const message = plainStudyText(payload?.message);
     if (!message) return json(response, 400, { error: "A message is required." });
+    const provider = payload?.provider === "groq" ? "groq" : "grok";
+    const apiKey = provider === "groq" ? process.env.GROQ_API_KEY : process.env.XAI_API_KEY;
+    if (!apiKey) return json(response, 503, { error: provider === "groq" ? "Groq is not configured. Set GROQ_API_KEY before starting Documentation." : "Grok is not configured. Set XAI_API_KEY before starting Documentation." });
     try {
-      const upstream = await fetch("https://api.x.ai/v1/chat/completions", {
+      const upstream = await fetch(provider === "groq" ? "https://api.groq.com/openai/v1/chat/completions" : "https://api.x.ai/v1/chat/completions", {
         method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${process.env.XAI_API_KEY}` },
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}` },
         body: JSON.stringify({
-          model: process.env.XAI_MODEL || "latest",
+          model: plainStudyText(payload?.model) || (provider === "groq" ? "openai/gpt-oss-20b" : process.env.XAI_MODEL || "latest"),
           messages: [
             { role: "system", content: "You are Grok inside a Master IT study notebook. Reply only as concise, readable learning text. French is primary; add a short Arabic explanation when useful. Never use HTML, Markdown, CSS, JavaScript, code blocks, or tags." },
             { role: "user", content: message }
