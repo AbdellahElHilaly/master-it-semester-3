@@ -8,6 +8,7 @@ const root = fileURLToPath(new URL(".", import.meta.url));
 const publicRoot = join(root, "public");
 const dataRoot = join(root, ".data");
 const databasePath = join(dataRoot, "documentation.sqlite");
+const devUtilsConfig = join(process.env.USERPROFILE || "C:\\Users\\DELL", "src", "sami-worspace", "components", "dev-utils", "ai-config.json");
 mkdirSync(dataRoot, { recursive: true });
 
 const db = new DatabaseSync(databasePath);
@@ -41,6 +42,16 @@ const seedModules = [
 const insertModule = db.prepare("INSERT OR IGNORE INTO modules (slug, title_fr, title_ar, status) VALUES (?, ?, ?, ?)");
 for (const module of seedModules) insertModule.run(...module);
 db.prepare("INSERT OR IGNORE INTO settings (key, value) VALUES ('theme', 'graphite')").run();
+db.prepare("INSERT OR IGNORE INTO settings (key, value) VALUES ('provider', 'grok')").run();
+db.prepare("INSERT OR IGNORE INTO settings (key, value) VALUES ('model', 'latest')").run();
+
+function groqProfile() {
+  try {
+    const config = JSON.parse(readFileSync(devUtilsConfig, "utf8"));
+    const profile = config?.providers?.groq || {};
+    return { key: process.env.GROQ_API_KEY || profile.apiKey || "", models: Array.isArray(profile.models) ? profile.models.map(model => typeof model === "string" ? model : model?.id).filter(Boolean) : [] };
+  } catch { return { key: process.env.GROQ_API_KEY || "", models: [] }; }
+}
 
 const json = (response, status, body) => {
   response.writeHead(status, { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" });
@@ -83,9 +94,9 @@ const server = createServer(async (request, response) => {
   if (url.pathname === "/api/config" && request.method === "POST") {
     const payload = await readJson(request);
     if (!payload) return json(response, 400, { error: "Invalid JSON" });
-    if (!["graphite", "paper", "webapi"].includes(payload.theme)) return json(response, 400, { error: "Unsupported theme" });
-    db.prepare("INSERT INTO settings (key, value) VALUES ('theme', ?) ON CONFLICT(key) DO UPDATE SET value=excluded.value").run(payload.theme);
-    return json(response, 200, { ok: true, theme: payload.theme });
+    if (payload.theme && !["graphite", "paper", "webapi"].includes(payload.theme)) return json(response, 400, { error: "Unsupported theme" });
+    for (const key of ["theme", "provider", "model"]) if (typeof payload[key] === "string") db.prepare("INSERT INTO settings (key, value) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET value=excluded.value").run(key, payload[key]);
+    return json(response, 200, { ok: true });
   }
   if (url.pathname === "/api/samples" && request.method === "POST") {
     const payload = await readJson(request);
@@ -95,14 +106,15 @@ const server = createServer(async (request, response) => {
     return json(response, 201, { ok: true, id: Number(result.lastInsertRowid) });
   }
   if (url.pathname === "/api/grok/status" && request.method === "GET") {
-    return json(response, 200, { providers: { grok: { configured: Boolean(process.env.XAI_API_KEY), models: [process.env.XAI_MODEL || "latest"] }, groq: { configured: Boolean(process.env.GROQ_API_KEY), models: ["openai/gpt-oss-20b", "openai/gpt-oss-120b", "llama-3.3-70b-versatile"] } } });
+    const groq = groqProfile();
+    return json(response, 200, { providers: { grok: { configured: Boolean(process.env.XAI_API_KEY), models: [process.env.XAI_MODEL || "latest"] }, groq: { configured: Boolean(groq.key), models: groq.models.length ? groq.models : ["openai/gpt-oss-20b", "openai/gpt-oss-120b", "llama-3.3-70b-versatile"] } } });
   }
   if (url.pathname === "/api/grok/chat" && request.method === "POST") {
     const payload = await readJson(request);
     const message = plainStudyText(payload?.message);
     if (!message) return json(response, 400, { error: "A message is required." });
     const provider = payload?.provider === "groq" ? "groq" : "grok";
-    const apiKey = provider === "groq" ? process.env.GROQ_API_KEY : process.env.XAI_API_KEY;
+    const apiKey = provider === "groq" ? groqProfile().key : process.env.XAI_API_KEY;
     if (!apiKey) return json(response, 503, { error: provider === "groq" ? "Groq is not configured. Set GROQ_API_KEY before starting Documentation." : "Grok is not configured. Set XAI_API_KEY before starting Documentation." });
     try {
       const upstream = await fetch(provider === "groq" ? "https://api.groq.com/openai/v1/chat/completions" : "https://api.x.ai/v1/chat/completions", {
