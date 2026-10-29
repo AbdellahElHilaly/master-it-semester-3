@@ -69,7 +69,7 @@ const server = createServer(async (request, response) => {
     let body = "";
     for await (const chunk of request) body += chunk;
     const payload = JSON.parse(body || "{}");
-    if (payload.theme !== "light" && payload.theme !== "quiet") return json(response, 400, { error: "Unsupported theme" });
+    if (!["graphite", "paper", "webapi"].includes(payload.theme)) return json(response, 400, { error: "Unsupported theme" });
     db.prepare("INSERT INTO settings (key, value) VALUES ('theme', ?) ON CONFLICT(key) DO UPDATE SET value=excluded.value").run(payload.theme);
     return json(response, 200, { ok: true, theme: payload.theme });
   }
