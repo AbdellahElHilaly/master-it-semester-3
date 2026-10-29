@@ -21,6 +21,15 @@ Learning-by-doing repository for **Programmation concurrente et parallèle**.
 
 This lab is separate from `Shared materials`: documents stay in Drive, while code and its history stay in Git.
 
+## Documentation app
+
+The reusable study notebook lives in `documentation/`. It provides navigation, themes, French-first lessons with Arabic support, module listing, practice notes, and a local SQLite configuration store.
+
+```powershell
+cd documentation
+npm start
+```
+
 ## Notion
 
 The Notion PAR module page is the study dashboard. It should link to this repository and record completed experiments, not duplicate the source code.
