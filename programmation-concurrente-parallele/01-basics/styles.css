@@ -21,11 +21,12 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-.hero, .layout { width: min(1180px, calc(100% - 34px)); margin-inline: auto; }
+.hero, .layout { width: min(1180px, calc(100% - 34px)); margin-inline: auto; direction: ltr; }
+.hero { text-align: left; }
 .hero { padding: 14px 0 7px; }
 .eyebrow, .card-label { color: var(--accent); font-family: var(--font-latin); font-size: .66rem; font-weight: 600; letter-spacing: .025em; }
-.ar { display: block; color: var(--muted); font-size: .82em; font-weight: 400; line-height: 1.35; }
-.card-label .ar { display: inline; margin-inline-start: 7px; }
+.ar { display: block; color: var(--muted); direction: rtl; text-align: right; font-size: .82em; font-weight: 400; line-height: 1.35; }
+.card-label .ar { display: block; margin-inline-start: 0; }
 h1, h2, p { margin-top: 0; }
 b, strong { font-weight: 600; }
 h1 { max-width: 760px; margin: 2px 0 2px; font-family: var(--font-ui); font-size: clamp(1.65rem, 3vw, 2.25rem); font-weight: 650; line-height: 1.12; }
@@ -46,7 +47,7 @@ h2 { margin-bottom: 3px; font-size: 1rem; line-height: 1.2; }
   padding: 7px 0 10px;
 }
 
-article, aside { min-width: 0; }
+article, aside { min-width: 0; direction: ltr; text-align: left; }
 .focus { grid-area: focus; }
 .vocabulary { grid-area: vocabulary; }
 .lesson { grid-area: lesson; }
@@ -62,7 +63,7 @@ h2, .focus h2, .lesson h2, .practice h2 { color: var(--accent-dark); font-weight
 .note, .callout { margin-bottom: 0; color: var(--muted); font-size: .72rem; }
 
 dl { margin: 2px 0 0; }
-dt { margin-top: 2px; color: var(--ink); font-family: var(--font-latin); font-weight: 600; direction: ltr; text-align: right; }
+dt { margin-top: 2px; color: var(--ink); font-family: var(--font-latin); font-weight: 600; direction: ltr; text-align: left; }
 dd { margin: 0; }
 ol { margin: 3px 0 4px; padding-right: 18px; }
 li { margin: 1px 0; }
