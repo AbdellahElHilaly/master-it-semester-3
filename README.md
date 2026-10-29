@@ -26,3 +26,6 @@ This lab is separate from `Shared materials`: documents stay in Drive, while cod
 The Notion PAR module page is the study dashboard. It should link to this repository and record completed experiments, not duplicate the source code.
 
 Repository status: local repository initialized and ready to be published in the shared semester repository.
+
+GitHub repository: https://github.com/AbdellahElHilaly/master-it-semester-3
+
