@@ -21,9 +21,9 @@ Learning-by-doing repository for **Programmation concurrente et parallèle**.
 
 This lab is separate from `Shared materials`: documents stay in Drive, while code and its history stay in Git.
 
-## Documentation app
+## Study documentation
 
-The reusable study notebook lives in `documentation/`. It provides navigation, themes, French-first lessons with Arabic support, module listing, practice notes, and a local SQLite configuration store.
+The reusable study notebook now lives in the Sami Workspace S3 Documentation component. This lab repository remains focused on runnable practice, experiments, and code.
 
 ```powershell
 cd documentation
